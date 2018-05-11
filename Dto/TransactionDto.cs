@@ -1,13 +1,11 @@
-﻿using System;
-
-namespace Dto
+﻿namespace WebTask1.Dto
 {
     public class TransactionDto
     {
-        public string generatedId { get; set; }
-        public string idSender { get; set; }
-        public string idReceiver { get; set; }
-        public decimal sum { get; set; }
-        public string currency { get; set; }
+        public string GeneratedId { get; set; }
+        public string IdSender { get; set; }
+        public string IdReceiver { get; set; }
+        public decimal Sum { get; set; }
+        public string Currency { get; set; }
     }
 }

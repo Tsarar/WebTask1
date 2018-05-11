@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using Dto;
+using WebTask1.Dto;
 using System.Net;
 using System.Linq;
 
@@ -19,24 +19,25 @@ namespace Controllers
         }
 
         [HttpPost("register")]
-        public void registerTransaction([FromBody] RegisterDto)
+        public void registerTransaction([FromBody] RegisterDto registerDto)
         {
-            if (String.IsNullOrEmpty(idSender) || 
-                String.IsNullOrEmpty(idReceiver) || 
-                sum <= 0 || 
-                String.IsNullOrEmpty(currency))
+            if (String.IsNullOrEmpty(registerDto.IdSender) || 
+                String.IsNullOrEmpty(registerDto.IdReceiver) ||
+                registerDto.Sum <= 0 || 
+                String.IsNullOrEmpty(registerDto.Currency))
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return;
             }
 
-            TransactionDto transaction = new TransactionDto();
-
-            transaction.generatedId = id;
-            transaction.idSender = idSender;
-            transaction.idReceiver = idReceiver;
-            transaction.sum = sum;
-            transaction.currency = currency;
+            TransactionDto transaction = new TransactionDto()
+            {
+                GeneratedId = id,
+                IdSender = registerDto.IdSender,
+                IdReceiver = registerDto.IdReceiver,
+                Sum = registerDto.Sum,
+                Currency = registerDto.Currency
+            };
 
             transactionList.Add(transaction);
             string result = String.Format($"Transaction added, unique id - {id}");
@@ -59,7 +60,7 @@ namespace Controllers
         {
             if (String.IsNullOrEmpty(uniqueId)) return null;
             
-            return transactionList.FirstOrDefault(transaction => transaction.generatedId == uniqueId);
+            return transactionList.FirstOrDefault(transaction => transaction.GeneratedId == uniqueId);
         }
 
         [HttpGet("Marco")]
