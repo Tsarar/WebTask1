@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using RabbitMQ.Client;
 
 namespace WebTask1.Start
 {
@@ -18,6 +19,19 @@ namespace WebTask1.Start
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+
+            services.AddSingleton<IConnection>(provider =>
+            {
+                ConnectionFactory factory = new ConnectionFactory
+                {
+                    UserName = "cdkxtrhe",
+                    Password = "ALMkgEdwWx2M6ECRhqnnQPsTPgGDpz5U",
+                    VirtualHost = "cdkxtrhe",
+                    HostName = "sheep-01.rmq.cloudamqp.com"
+                };
+
+                return factory.CreateConnection();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
