@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Dto\WebTask1.Dto.csproj" />
+    <ProjectReference Include="..\Rabbit\WebTask1.Rabbit.csproj" />
   </ItemGroup>
 
 </Project>

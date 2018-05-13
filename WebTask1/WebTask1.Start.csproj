@@ -14,6 +14,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Dto\WebTask1.Dto.csproj" />
     <ProjectReference Include="..\NameController\WebTask1.Controllers.csproj" />
+    <ProjectReference Include="..\Rabbit\WebTask1.Rabbit.csproj" />
+    <ProjectReference Include="..\Utils\WebTask1.Utils.csproj" />
   </ItemGroup>
   
 </Project>

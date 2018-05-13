@@ -5,9 +5,13 @@ VisualStudioVersion = 15.0.27703.2000
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebTask1.Start", "WebTask1\WebTask1.Start.csproj", "{23B77532-8AB4-46BF-9BF8-AE4FB8708794}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebTask1.Controllers", "NameController\WebTask1.Controllers.csproj", "{D1356466-9527-4207-90C5-A1DAF86C70C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebTask1.Controllers", "NameController\WebTask1.Controllers.csproj", "{D1356466-9527-4207-90C5-A1DAF86C70C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebTask1.Dto", "Dto\WebTask1.Dto.csproj", "{86D46B2E-866F-4DAD-A611-7ADA9B47EDDB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebTask1.Dto", "Dto\WebTask1.Dto.csproj", "{86D46B2E-866F-4DAD-A611-7ADA9B47EDDB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebTask1.Rabbit", "Rabbit\WebTask1.Rabbit.csproj", "{56C0B8C7-A095-4984-9FCA-71FA6359730E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebTask1.Utils", "Utils\WebTask1.Utils.csproj", "{8E2B9C48-00FF-42D8-AB06-C88850165567}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +31,14 @@ Global
 		{86D46B2E-866F-4DAD-A611-7ADA9B47EDDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86D46B2E-866F-4DAD-A611-7ADA9B47EDDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{86D46B2E-866F-4DAD-A611-7ADA9B47EDDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56C0B8C7-A095-4984-9FCA-71FA6359730E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56C0B8C7-A095-4984-9FCA-71FA6359730E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56C0B8C7-A095-4984-9FCA-71FA6359730E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56C0B8C7-A095-4984-9FCA-71FA6359730E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E2B9C48-00FF-42D8-AB06-C88850165567}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E2B9C48-00FF-42D8-AB06-C88850165567}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E2B9C48-00FF-42D8-AB06-C88850165567}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E2B9C48-00FF-42D8-AB06-C88850165567}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

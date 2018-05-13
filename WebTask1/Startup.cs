@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RabbitMQ.Client;
+using WebTask1.Rabbit;
 
 namespace WebTask1.Start
 {
@@ -32,6 +33,7 @@ namespace WebTask1.Start
 
                 return factory.CreateConnection();
             });
+            services.AddSingleton<RabbitOperations>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
