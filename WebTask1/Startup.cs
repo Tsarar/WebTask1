@@ -42,7 +42,7 @@ namespace WebTask1.Start
 
             services.AddSingleton<TransactionStorage>();
 
-            services.AddSingleton<IHostedService, RabbitMQReceiver>();//TODO
+            services.AddSingleton<IHostedService, RabbitMQReceiver>();
             services.AddSingleton<IHostedService, RabbitServer>();
         }
 
