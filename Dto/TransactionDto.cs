@@ -2,6 +2,13 @@
 
 namespace WebTask1.Dto
 {
+    public enum Statuses
+    {
+        New,
+        Filled,
+        Rejected
+    }
+
     [DataContract]
     public class TransactionDto
     {
@@ -9,10 +16,10 @@ namespace WebTask1.Dto
         public string GeneratedId { get; set; }
 
         [DataMember]
-        public string IdSender { get; set; }
+        public string SenderId { get; set; }
 
         [DataMember]
-        public string IdReceiver { get; set; }
+        public string ReceiverId { get; set; }
 
         [DataMember]
         public decimal Sum { get; set; }
@@ -21,6 +28,6 @@ namespace WebTask1.Dto
         public string Currency { get; set; }
 
         [DataMember]
-        public string Status { get; set; }
+        public Statuses Status { get; set; }
     }
 }

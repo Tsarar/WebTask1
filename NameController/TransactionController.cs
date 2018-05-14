@@ -1,32 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
+using WebTask1.Storages;
 using WebTask1.Dto;
-using WebTask1.Rabbit;
+using WebTask1.RabbitMQMessaging;
 
 namespace WebTask1.Controllers
 {
     [Route("api/v2/[controller]")]
     public class TransactionController : Controller
     {
-        private static readonly List<TransactionDto> TransactionList = new List<TransactionDto>();
-        private static string _id = "0";
-        private static RabbitOperations _conn;
+        private readonly RabbitMQSend _send;
+        private readonly TransactionStorage _storage;
 
-        public TransactionController(RabbitOperations conn)
+        public TransactionController(RabbitMQSend conn, TransactionStorage storage)
         {
-            _conn = conn;
+            _send = conn;
+            _storage = storage;
         }
 
         [HttpPost("register")]
         public string RegisterTransaction([FromBody] RegisterDto registerDto)
         {
-            if (String.IsNullOrEmpty(registerDto.IdSender) || 
-                String.IsNullOrEmpty(registerDto.IdReceiver) ||
+            if (String.IsNullOrEmpty(registerDto.SenderId) || 
+                String.IsNullOrEmpty(registerDto.ReceiverId) ||
                 registerDto.Sum <= 0 || 
                 String.IsNullOrEmpty(registerDto.Currency))
             {
@@ -36,25 +36,21 @@ namespace WebTask1.Controllers
 
             TransactionDto transaction = new TransactionDto
             {
-                GeneratedId = _id,
-                IdSender = registerDto.IdSender,
-                IdReceiver = registerDto.IdReceiver,
+                GeneratedId = Guid.NewGuid().ToString(),
+                SenderId = registerDto.SenderId,
+                ReceiverId = registerDto.ReceiverId,
                 Sum = registerDto.Sum,
                 Currency = registerDto.Currency,
-                Status = "New"
+                Status = Statuses.New
             };
 
-            TransactionList.Add(transaction);
-
-            _conn.WriteMessage(transaction);
+            _send.WriteMessage(transaction);
 
             MemoryStream bodyStream = new MemoryStream();
             StreamWriter result = new StreamWriter(bodyStream, new UnicodeEncoding());
-            result.Write(String.Format($"Transaction added, unique id - {_id}"));
+            result.Write(String.Format($"Transaction added, unique id - {transaction.GeneratedId}"));
                 
             Response.Body = bodyStream;
-
-            _id = (Convert.ToInt32(_id) + 1).ToString();
 
             Response.StatusCode = (int)HttpStatusCode.OK;
             return transaction.GeneratedId;
@@ -63,15 +59,7 @@ namespace WebTask1.Controllers
         [HttpGet("getall")]
         public List<TransactionDto> GetAllTransations()
         {
-            if (TransactionList.Count == 0) return null;
-
-            return TransactionList;
-        }
-
-        [HttpGet("getallrabbit")]
-        public List<TransactionDto> GetAllTransationsRabbit()
-        {
-            return _conn.GetMessages();
+            return _storage.GetAll();
         }
 
         [HttpGet("getbyid")]
@@ -79,7 +67,7 @@ namespace WebTask1.Controllers
         {
             if (String.IsNullOrEmpty(uniqueId)) return null;
             
-            return TransactionList.FirstOrDefault(transaction => transaction.GeneratedId == uniqueId);
+            return _storage.GetById(uniqueId);
         }
 
         [HttpGet("Marco")]

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore;
+﻿using System.Threading;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
 namespace WebTask1.Start
@@ -9,10 +10,11 @@ namespace WebTask1.Start
         {
             BuildWebHost(args).Run();
         }
-
+        
         public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder()
-                   .UseStartup<Startup>()
-                   .Build();
+                       WebHost.CreateDefaultBuilder()
+                              .UseStartup<Startup>()
+                              .Build();
     }
 }
+

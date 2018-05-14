@@ -2,8 +2,12 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using RabbitMQ.Client;
-using WebTask1.Rabbit;
+using WebTask1.Messaging;
+using WebTask1.RabbitMQ;
+using WebTask1.RabbitMQMessaging;
+using WebTask1.Storages;
 
 namespace WebTask1.Start
 {
@@ -33,13 +37,21 @@ namespace WebTask1.Start
 
                 return factory.CreateConnection();
             });
-            services.AddSingleton<RabbitOperations>();
+
+            services.AddSingleton<RabbitMQSend>();
+
+            services.AddSingleton<TransactionStorage>();
+
+            services.AddSingleton<IHostedService, RabbitMQReceiver>();//TODO
+            services.AddSingleton<IHostedService, RabbitServer>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseMvc();
+
+            //app.ApplicationServices.GetRequiredService<RabbitServer>(); Maybe
         }
     }
 }

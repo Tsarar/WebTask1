@@ -1,28 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Json;
+using System.Threading;
 using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
 using WebTask1.Dto;
 using WebTask1.Utils;
+using WebTask1.Storages;
 
 namespace WebTask1.Rabbit
 {
-    public class RabbitOperations
+    /*public class RabbitOperations : IDisposable
     {
-        private static IConnection _conn;
-        private static IModel _channelSend;
-        private static IModel _channelReceive;
+        private readonly IConnection _conn;
+        private readonly TransactionStorage _storage;
 
-        private const string ExchangeName = "forwebtest.direct";
-        private const string QueryName = "catchStuff";
-        private const string RoutingKey = "candy";
+        private IModel _channelSend;
+        private IModel _channelReceive;
 
-        public RabbitOperations(IConnection conn)
+        private const string EXCHANGE_NAME = "forwebtest.direct";
+        private const string QUERY_NAME = "catchStuff";
+        private const string ROUTING_KEY = "candy";
+
+        public RabbitOperations(IConnection conn, TransactionStorage storage)
         {
             _conn = conn;
+            _storage = storage;
 
             ConfigurateOperator();
+            CreateMessageConsumer();
         }
 
         private void ConfigurateOperator()
@@ -30,13 +36,13 @@ namespace WebTask1.Rabbit
             _channelSend = _conn.CreateModel();
             _channelReceive = _conn.CreateModel();
 
-            _channelSend.ExchangeDeclare(ExchangeName, ExchangeType.Direct, true);
-            _channelSend.QueueDeclare(QueryName, true, false, false, null);
-            _channelSend.QueueBind(QueryName, ExchangeName, RoutingKey, null);
+            _channelSend.ExchangeDeclare(EXCHANGE_NAME, ExchangeType.Direct, true);
+            _channelSend.QueueDeclare(QUERY_NAME, true, false, false, null);
+            _channelSend.QueueBind(QUERY_NAME, EXCHANGE_NAME, ROUTING_KEY, null);
 
-            _channelSend.ExchangeDeclare(ExchangeName, ExchangeType.Direct, true);
-            _channelSend.QueueDeclare(QueryName, true, false, false, null);
-            _channelSend.QueueBind(QueryName, ExchangeName, RoutingKey, null);
+            _channelReceive.ExchangeDeclare(EXCHANGE_NAME, ExchangeType.Direct, true);
+            _channelReceive.QueueDeclare(QUERY_NAME, true, false, false, null);
+            _channelReceive.QueueBind(QUERY_NAME, EXCHANGE_NAME, ROUTING_KEY, null);
         }
 
         public bool WriteMessage(object obj)
@@ -44,7 +50,7 @@ namespace WebTask1.Rabbit
             try
             {
                 byte[] messageBodyBytes = ConvertUtils.ConvertObjectToJsonByteArray(obj);
-                _channelSend.BasicPublish(ExchangeName, RoutingKey, null, messageBodyBytes);
+                _channelSend.BasicPublish(EXCHANGE_NAME, ROUTING_KEY, null, messageBodyBytes);
             }
             catch (Exception)
             {
@@ -53,37 +59,37 @@ namespace WebTask1.Rabbit
             return true;
         }
 
-        public List<TransactionDto> GetMessages()
+        public void CreateMessageConsumer()
         {
-            List<TransactionDto> results = new List<TransactionDto>();
-            Random random = new Random();
-            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(TransactionDto));
-            BasicGetResult askResult = _channelReceive.BasicGet(QueryName, false);
-
-            while (askResult != null)
+            var consumer = new EventingBasicConsumer(_channelReceive);
+            consumer.Received += (model, ea) =>
             {
-                // acknowledge receipt of the message
-                _channelReceive.BasicAck(askResult.DeliveryTag, false);
+                var random = new Random();
+                DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(TransactionDto));
 
-                using (MemoryStream body = new MemoryStream(askResult.Body))
+                using (MemoryStream body = new MemoryStream(ea.Body))
                 {
                     try
                     {
                         TransactionDto transaction = (TransactionDto)serializer.ReadObject(body);
 
-                        transaction.Status = random.Next(0, 2) == 0 ? "Filled" : "Rejected";
+                        transaction.Status = random.Next(0, 2) == 0 ? Statuses.Filled : Statuses.Rejected;
 
-                        results.Add(transaction);
+                        _storage.AddTransaction(transaction);
+
+                        _channelReceive.BasicAck(ea.DeliveryTag, false);
                     }
                     catch (Exception)
                     {
                         //invalid serialization object
                     }
                 }
-                askResult = _channelReceive.BasicGet(QueryName, false);
-            }
-
-            return results;
+            };
         }
-    }
+
+        public void Dispose()
+        {
+            if (_conn.IsOpen) _conn.Close();
+        }
+    }*/
 }
