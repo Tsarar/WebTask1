@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -11,10 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Dto\WebTask1.Dto.csproj" />
-    <ProjectReference Include="..\Messaging\WebTask1.Messaging.csproj" />
-    <ProjectReference Include="..\Utils\WebTask1.Utils.csproj" />
     <ProjectReference Include="..\WebTask1.Storages\WebTask1.Storages.csproj" />
+    <ProjectReference Include="..\WebTask1.Utils\WebTask1.Utils.csproj" />
   </ItemGroup>
 
   <ItemGroup>

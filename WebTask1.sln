@@ -3,19 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2000
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebTask1.Start", "WebTask1\WebTask1.Start.csproj", "{23B77532-8AB4-46BF-9BF8-AE4FB8708794}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebTask1.Start", "WebTask1.Start\WebTask1.Start.csproj", "{23B77532-8AB4-46BF-9BF8-AE4FB8708794}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebTask1.Controllers", "NameController\WebTask1.Controllers.csproj", "{D1356466-9527-4207-90C5-A1DAF86C70C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebTask1.Controllers", "WebTask1.NameController\WebTask1.Controllers.csproj", "{D1356466-9527-4207-90C5-A1DAF86C70C1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebTask1.Dto", "Dto\WebTask1.Dto.csproj", "{86D46B2E-866F-4DAD-A611-7ADA9B47EDDB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebTask1.Dto", "WebTask1.Dto\WebTask1.Dto.csproj", "{86D46B2E-866F-4DAD-A611-7ADA9B47EDDB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebTask1.Utils", "Utils\WebTask1.Utils.csproj", "{8E2B9C48-00FF-42D8-AB06-C88850165567}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebTask1.Utils", "WebTask1.Utils\WebTask1.Utils.csproj", "{8E2B9C48-00FF-42D8-AB06-C88850165567}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebTask1.Storages", "WebTask1.Storages\WebTask1.Storages.csproj", "{A9EC834D-9E7E-4D8A-A036-F28D3D648678}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebTask1.RabbitMQ", "RabbitMQ\WebTask1.RabbitMQ.csproj", "{3ED45614-7C1F-456A-AF7F-E41131070DD7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebTask1.RabbitMQ", "WebTask1.RabbitMQ\WebTask1.RabbitMQ.csproj", "{3ED45614-7C1F-456A-AF7F-E41131070DD7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebTask1.Messaging", "Messaging\WebTask1.Messaging.csproj", "{6280835F-E271-4B6C-8619-0CA4106DEE15}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebTask1.Messaging", "WebTask1.Messaging\WebTask1.Messaging.csproj", "{6280835F-E271-4B6C-8619-0CA4106DEE15}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebTask1.Config", "WebTask1.Config\WebTask1.Config.csproj", "{A07CF3A5-8B52-4CC5-98AB-6D401DA16E44}"
 EndProject

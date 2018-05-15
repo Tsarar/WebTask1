@@ -39,8 +39,6 @@ namespace WebTask1.RabbitMQ
                 HostName = "sheep-01.rmq.cloudamqp.com"
             };
 
-
-
             _conn = factory.CreateConnection();
         }
 

@@ -12,13 +12,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Dto\WebTask1.Dto.csproj" />
-    <ProjectReference Include="..\Messaging\WebTask1.Messaging.csproj" />
-    <ProjectReference Include="..\NameController\WebTask1.Controllers.csproj" />
-    <ProjectReference Include="..\RabbitMQ\WebTask1.RabbitMQ.csproj" />
-    <ProjectReference Include="..\Utils\WebTask1.Utils.csproj" />
     <ProjectReference Include="..\WebTask1.Config\WebTask1.Config.csproj" />
+    <ProjectReference Include="..\WebTask1.Messaging\WebTask1.Messaging.csproj" />
+    <ProjectReference Include="..\WebTask1.RabbitMQ\WebTask1.RabbitMQ.csproj" />
     <ProjectReference Include="..\WebTask1.Storages\WebTask1.Storages.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="RabbitMQ.Client">
+      <HintPath>C:\Users\Tsarar\.nuget\packages\rabbitmq.client\5.0.1\lib\netstandard1.5\RabbitMQ.Client.dll</HintPath>
+    </Reference>
   </ItemGroup>
   
 </Project>

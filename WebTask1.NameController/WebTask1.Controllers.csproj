@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -10,8 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Dto\WebTask1.Dto.csproj" />
-    <ProjectReference Include="..\Messaging\WebTask1.Messaging.csproj" />
+    <ProjectReference Include="..\WebTask1.Messaging\WebTask1.Messaging.csproj" />
     <ProjectReference Include="..\WebTask1.Storages\WebTask1.Storages.csproj" />
   </ItemGroup>
 

@@ -1,11 +1,9 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RabbitMQ.Client;
-using WebTask1.Config;
 using WebTask1.Messaging;
 using WebTask1.RabbitMQ;
 using WebTask1.RabbitMQMessaging;
