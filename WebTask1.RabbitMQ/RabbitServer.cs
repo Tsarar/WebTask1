@@ -54,8 +54,8 @@ namespace WebTask1.RabbitMQ
             CreateMessageConsumer();
 
             _channelReceive.BasicConsume(queue: QUEUE_NAME_NEW,
-                autoAck: true,
-                consumer: _consumer);
+                                         autoAck: true,
+                                         consumer: _consumer);
 
             return Task.CompletedTask;
         }
