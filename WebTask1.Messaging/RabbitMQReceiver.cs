@@ -18,7 +18,7 @@ namespace WebTask1.Messaging
 
         private IModel _channelReceive;
 
-        private EventingBasicConsumer consumer;
+        private EventingBasicConsumer _consumer;
 
         private readonly TransactionStorage _storage;
 
@@ -50,8 +50,8 @@ namespace WebTask1.Messaging
 
         public void CreateMessageConsumer()
         {
-            consumer = new EventingBasicConsumer(_channelReceive);
-            consumer.Received += (model, ea) =>
+            _consumer = new EventingBasicConsumer(_channelReceive);
+            _consumer.Received += (model, ea) =>
             {
                 DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(TransactionDto));
 
@@ -72,7 +72,7 @@ namespace WebTask1.Messaging
 
             _channelReceive.BasicConsume(queue: _queueNameProcessed,
                                          autoAck: true,
-                                         consumer: consumer);
+                                         consumer: _consumer);
         }
 
         public void Dispose()
@@ -87,7 +87,7 @@ namespace WebTask1.Messaging
 
             _channelReceive.BasicConsume(queue: _queueNameProcessed,
                                          autoAck: true,
-                                         consumer: consumer);
+                                         consumer: _consumer);
 
             return Task.CompletedTask;
         }

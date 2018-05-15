@@ -7,8 +7,6 @@ namespace WebTask1.RabbitMQ
 {
     class Program
     {
-        //private RabbitServer server;//TODO
-
         static void Main(string[] args)
         {
             var server = new RabbitServer();

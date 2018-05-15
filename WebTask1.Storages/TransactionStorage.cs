@@ -25,5 +25,25 @@ namespace WebTask1.Storages
         {
             return _transactionList.FirstOrDefault(transaction => transaction.GeneratedId == id);
         }
+
+        public void InsertOrUpdate(TransactionDto newTransaction)
+        {
+            TransactionDto transaction = _transactionList.FirstOrDefault(trans => trans.GeneratedId == newTransaction.GeneratedId);
+
+            if (transaction == null)
+            {
+                _transactionList.Add(newTransaction);
+            }
+            else
+            {
+                foreach (var trans in _transactionList)
+                {
+                    if (trans.GeneratedId == newTransaction.GeneratedId)
+                    {
+                        trans.Status = newTransaction.Status;
+                    }
+                }
+            }
+        }
     }
 }

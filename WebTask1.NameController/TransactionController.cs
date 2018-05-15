@@ -45,14 +45,7 @@ namespace WebTask1.Controllers
             };
 
             _send.WriteMessage(transaction);
-
-            MemoryStream bodyStream = new MemoryStream();
-            StreamWriter result = new StreamWriter(bodyStream, new UnicodeEncoding());
-            result.Write(String.Format($"Transaction added, unique id - {transaction.GeneratedId}"));
-                
-            Response.Body = bodyStream;
-
-            Response.StatusCode = (int)HttpStatusCode.OK;
+            
             return transaction.GeneratedId;
         }
 
@@ -63,11 +56,11 @@ namespace WebTask1.Controllers
         }
 
         [HttpGet("getbyid")]
-        public TransactionDto GetTransactionById([FromQuery] string uniqueId)
+        public TransactionDto GetTransactionById([FromQuery] string id)
         {
-            if (String.IsNullOrEmpty(uniqueId)) return null;
+            if (String.IsNullOrEmpty(id)) return null;
             
-            return _storage.GetById(uniqueId);
+            return _storage.GetById(id);
         }
 
         [HttpGet("Marco")]

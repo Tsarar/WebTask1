@@ -3,10 +3,11 @@ using System.IO;
 using System.Runtime.Serialization.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+
 using WebTask1.Dto;
 using WebTask1.Utils;
 
@@ -14,13 +15,6 @@ namespace WebTask1.RabbitMQ
 {
     public class RabbitServer : IDisposable, IHostedService
     {
-        private readonly IConnection _conn;
-
-        private IModel _channelSend;
-        private IModel _channelReceive;
-
-        private EventingBasicConsumer consumer;
-
         private const string EXCHANGE_NAME = "forwebtest.direct";
 
         private const string QUEUE_NAME_PROCESSED = "processed.issues";
@@ -28,6 +22,13 @@ namespace WebTask1.RabbitMQ
 
         private const string QUEUE_NAME_NEW = "new.issues";
         private const string ROUTING_KEY_NEW = "new";
+
+        private readonly IConnection _conn;
+
+        private IModel _channelSend;
+        private IModel _channelReceive;
+
+        private EventingBasicConsumer _consumer;
 
         public RabbitServer()
         {
@@ -65,8 +66,8 @@ namespace WebTask1.RabbitMQ
 
         public void CreateMessageConsumer()
         {
-           consumer = new EventingBasicConsumer(_channelReceive);
-           consumer.Received += (model, ea) =>
+           _consumer = new EventingBasicConsumer(_channelReceive);
+           _consumer.Received += (model, ea) =>
             {
                 var random = new Random();
                 DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(TransactionDto));
@@ -101,7 +102,7 @@ namespace WebTask1.RabbitMQ
 
             _channelReceive.BasicConsume(queue: QUEUE_NAME_NEW,
                                          autoAck: true,
-                                         consumer: consumer);
+                                         consumer: _consumer);
 
             return Task.CompletedTask;
         }
