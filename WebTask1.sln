@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebTask1.RabbitMQ", "Rabbit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebTask1.Messaging", "Messaging\WebTask1.Messaging.csproj", "{6280835F-E271-4B6C-8619-0CA4106DEE15}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebTask1.Config", "WebTask1.Config\WebTask1.Config.csproj", "{A07CF3A5-8B52-4CC5-98AB-6D401DA16E44}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{6280835F-E271-4B6C-8619-0CA4106DEE15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6280835F-E271-4B6C-8619-0CA4106DEE15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6280835F-E271-4B6C-8619-0CA4106DEE15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A07CF3A5-8B52-4CC5-98AB-6D401DA16E44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A07CF3A5-8B52-4CC5-98AB-6D401DA16E44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A07CF3A5-8B52-4CC5-98AB-6D401DA16E44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A07CF3A5-8B52-4CC5-98AB-6D401DA16E44}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

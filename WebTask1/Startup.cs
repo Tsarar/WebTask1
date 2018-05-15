@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RabbitMQ.Client;
+using WebTask1.Config;
 using WebTask1.Messaging;
 using WebTask1.RabbitMQ;
 using WebTask1.RabbitMQMessaging;
@@ -13,12 +15,12 @@ namespace WebTask1.Start
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -29,10 +31,10 @@ namespace WebTask1.Start
             {
                 ConnectionFactory factory = new ConnectionFactory
                 {
-                    UserName = "cdkxtrhe",
-                    Password = "ALMkgEdwWx2M6ECRhqnnQPsTPgGDpz5U",
-                    VirtualHost = "cdkxtrhe",
-                    HostName = "sheep-01.rmq.cloudamqp.com"
+                    UserName = Configuration["RabbitMQ:UserName"],
+                    Password = Configuration["RabbitMQ:Password"],
+                    VirtualHost = Configuration["RabbitMQ:VirtualHost"],
+                    HostName = Configuration["RabbitMQ:HostName"]
                 };
 
                 return factory.CreateConnection();

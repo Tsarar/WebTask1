@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Extensions.Configuration;
 using RabbitMQ.Client;
 using WebTask1.Utils;
 
@@ -10,13 +11,17 @@ namespace WebTask1.RabbitMQMessaging
 
         private IModel _channelSend;
 
-        private const string EXCHANGE_NAME = "forwebtest.direct";
-        private const string QUEUE_NAME = "catchStuff";
-        private const string ROUTING_KEY = "candy";
+        private readonly string _exchangeName;
+        private readonly string _queueNew;
+        private readonly string _routingKeyNew;
 
-        public RabbitMQSend(IConnection conn)
+        public RabbitMQSend(IConnection conn, IConfiguration config)
         {
             _conn = conn;
+
+            _exchangeName = config["RabbitMQ:ExchangeName"];
+            _queueNew = config["RabbitMQ:QueueNew"];
+            _routingKeyNew = config["RabbitMQ:RoutingKeyNew"];
 
             ConfigureChannels();
         }
@@ -27,9 +32,9 @@ namespace WebTask1.RabbitMQMessaging
             {
                 _channelSend = _conn.CreateModel();
 
-                _channelSend.ExchangeDeclare(EXCHANGE_NAME, ExchangeType.Direct, true);
-                _channelSend.QueueDeclare(QUEUE_NAME, true, false, false, null);
-                _channelSend.QueueBind(QUEUE_NAME, EXCHANGE_NAME, ROUTING_KEY, null);
+                _channelSend.ExchangeDeclare(_exchangeName, ExchangeType.Direct, true);
+                _channelSend.QueueDeclare(_queueNew, true, false, false, null);
+                _channelSend.QueueBind(_queueNew, _exchangeName, _routingKeyNew, null);
             }
         }
 
@@ -38,7 +43,7 @@ namespace WebTask1.RabbitMQMessaging
             try
             {
                 byte[] messageBodyBytes = ConvertUtils.ConvertObjectToJsonByteArray(obj);
-                _channelSend.BasicPublish(EXCHANGE_NAME, ROUTING_KEY, null, messageBodyBytes);
+                _channelSend.BasicPublish(_exchangeName, _routingKeyNew, null, messageBodyBytes);
             }
             catch (Exception)
             {

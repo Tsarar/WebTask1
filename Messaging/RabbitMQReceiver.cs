@@ -3,6 +3,7 @@ using System.IO;
 using System.Runtime.Serialization.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -21,14 +22,18 @@ namespace WebTask1.Messaging
 
         private readonly TransactionStorage _storage;
 
-        private const string EXCHANGE_NAME = "forwebtest.direct";
-        private const string QUEUE_NAME = "notNew";
-        private const string ROUTING_KEY = "watermelon";
+        private readonly string _exchangeName;
+        private readonly string _queueNameProcessed;
+        private readonly string _routingKeyProcessed;
 
-        public RabbitMQReceiver(IConnection conn, TransactionStorage storage)
+        public RabbitMQReceiver(IConnection conn, TransactionStorage storage, IConfiguration configuration)
         {
             _conn = conn;
             _storage = storage;
+
+            _exchangeName = configuration["RabbitMQ:ExchangeName"];
+            _queueNameProcessed = configuration["RabbitMQ:QueueProcessed"];
+            _routingKeyProcessed = configuration["RabbitMQ:RoutingKeyProcessed"];
         }
 
         private void ConfigureChannels()
@@ -37,9 +42,9 @@ namespace WebTask1.Messaging
             {
                 _channelReceive = _conn.CreateModel();
 
-                _channelReceive.ExchangeDeclare(EXCHANGE_NAME, ExchangeType.Direct, true);
-                _channelReceive.QueueDeclare(QUEUE_NAME, true, false, false, null);
-                _channelReceive.QueueBind(QUEUE_NAME, EXCHANGE_NAME, ROUTING_KEY, null);
+                _channelReceive.ExchangeDeclare(_exchangeName, ExchangeType.Direct, true);
+                _channelReceive.QueueDeclare(_queueNameProcessed, true, false, false, null);
+                _channelReceive.QueueBind(_queueNameProcessed, _exchangeName, _routingKeyProcessed, null);
             }
         }
 
@@ -65,7 +70,7 @@ namespace WebTask1.Messaging
                 }
             };
 
-            _channelReceive.BasicConsume(queue: QUEUE_NAME,
+            _channelReceive.BasicConsume(queue: _queueNameProcessed,
                                          autoAck: true,
                                          consumer: consumer);
         }
@@ -80,7 +85,7 @@ namespace WebTask1.Messaging
             ConfigureChannels();
             CreateMessageConsumer();
 
-            _channelReceive.BasicConsume(queue: QUEUE_NAME,
+            _channelReceive.BasicConsume(queue: _queueNameProcessed,
                                          autoAck: true,
                                          consumer: consumer);
 

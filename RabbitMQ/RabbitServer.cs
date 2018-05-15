@@ -3,6 +3,7 @@ using System.IO;
 using System.Runtime.Serialization.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -22,11 +23,11 @@ namespace WebTask1.RabbitMQ
 
         private const string EXCHANGE_NAME = "forwebtest.direct";
 
-        private const string QUEUE_NAME_SEND = "notNew";
-        private const string ROUTING_KEY_SEND = "watermelon";
+        private const string QUEUE_NAME_PROCESSED = "processed.issues";
+        private const string ROUTING_KEY_PROCESSED = "processed";
 
-        private const string QUEUE_NAME_RECEIVE = "catchStuff";
-        private const string ROUTING_KEY_RECEIVE = "candy";
+        private const string QUEUE_NAME_NEW = "new.issues";
+        private const string ROUTING_KEY_NEW = "new";
 
         public RabbitServer()
         {
@@ -38,6 +39,8 @@ namespace WebTask1.RabbitMQ
                 HostName = "sheep-01.rmq.cloudamqp.com"
             };
 
+
+
             _conn = factory.CreateConnection();
         }
 
@@ -48,8 +51,8 @@ namespace WebTask1.RabbitMQ
                 _channelSend = _conn.CreateModel();
 
                 _channelSend.ExchangeDeclare(EXCHANGE_NAME, ExchangeType.Direct, true);
-                _channelSend.QueueDeclare(QUEUE_NAME_SEND, true, false, false, null);
-                _channelSend.QueueBind(QUEUE_NAME_SEND, EXCHANGE_NAME, ROUTING_KEY_SEND, null);
+                _channelSend.QueueDeclare(QUEUE_NAME_PROCESSED, true, false, false, null);
+                _channelSend.QueueBind(QUEUE_NAME_PROCESSED, EXCHANGE_NAME, ROUTING_KEY_PROCESSED, null);
             }
 
             if (_channelReceive == null)
@@ -57,8 +60,8 @@ namespace WebTask1.RabbitMQ
                 _channelReceive = _conn.CreateModel();
 
                 _channelReceive.ExchangeDeclare(EXCHANGE_NAME, ExchangeType.Direct, true);
-                _channelReceive.QueueDeclare(QUEUE_NAME_RECEIVE, true, false, false, null);
-                _channelReceive.QueueBind(QUEUE_NAME_RECEIVE, EXCHANGE_NAME, ROUTING_KEY_RECEIVE, null);
+                _channelReceive.QueueDeclare(QUEUE_NAME_NEW, true, false, false, null);
+                _channelReceive.QueueBind(QUEUE_NAME_NEW, EXCHANGE_NAME, ROUTING_KEY_NEW, null);
             }
         }
 
@@ -98,7 +101,7 @@ namespace WebTask1.RabbitMQ
             ConfigurateOperator();
             CreateMessageConsumer();
 
-            _channelReceive.BasicConsume(queue: QUEUE_NAME_RECEIVE,
+            _channelReceive.BasicConsume(queue: QUEUE_NAME_NEW,
                                          autoAck: true,
                                          consumer: consumer);
 
@@ -117,7 +120,7 @@ namespace WebTask1.RabbitMQ
             try
             {
                 byte[] messageBodyBytes = ConvertUtils.ConvertObjectToJsonByteArray(obj);
-                _channelSend.BasicPublish(EXCHANGE_NAME, ROUTING_KEY_SEND, null, messageBodyBytes);
+                _channelSend.BasicPublish(EXCHANGE_NAME, ROUTING_KEY_PROCESSED, null, messageBodyBytes);
             }
             catch (Exception)
             {

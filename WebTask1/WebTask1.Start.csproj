@@ -17,6 +17,7 @@
     <ProjectReference Include="..\NameController\WebTask1.Controllers.csproj" />
     <ProjectReference Include="..\RabbitMQ\WebTask1.RabbitMQ.csproj" />
     <ProjectReference Include="..\Utils\WebTask1.Utils.csproj" />
+    <ProjectReference Include="..\WebTask1.Config\WebTask1.Config.csproj" />
     <ProjectReference Include="..\WebTask1.Storages\WebTask1.Storages.csproj" />
   </ItemGroup>
   
