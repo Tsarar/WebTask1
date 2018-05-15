@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
-using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using WebTask1.Storages;
 using WebTask1.Dto;
@@ -41,7 +39,7 @@ namespace WebTask1.Controllers
                 ReceiverId = registerDto.ReceiverId,
                 Sum = registerDto.Sum,
                 Currency = registerDto.Currency,
-                Status = Statuses.New
+                Status = TransactionStatus.New
             };
 
             _send.WriteMessage(transaction);

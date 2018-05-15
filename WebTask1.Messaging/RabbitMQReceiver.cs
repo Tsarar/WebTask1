@@ -36,6 +36,30 @@ namespace WebTask1.Messaging
             _routingKeyProcessed = configuration["RabbitMQ:RoutingKeyProcessed"];
         }
 
+        public void Dispose()
+        {
+            if (_conn.IsOpen) _conn.Close();
+        }
+
+        public Task StartAsync(CancellationToken cancellationToken)
+        {
+            ConfigureChannels();
+            CreateMessageConsumer();
+
+            _channelReceive.BasicConsume(queue: _queueNameProcessed,
+                autoAck: true,
+                consumer: _consumer);
+
+            return Task.CompletedTask;
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            if (_conn.IsOpen) _conn.Close();
+
+            return Task.CompletedTask;
+        }
+
         private void ConfigureChannels()
         {
             if (_channelReceive == null)
@@ -51,52 +75,30 @@ namespace WebTask1.Messaging
         public void CreateMessageConsumer()
         {
             _consumer = new EventingBasicConsumer(_channelReceive);
-            _consumer.Received += (model, ea) =>
+            _consumer.Received += AddMessageToStorage;
+
+            _channelReceive.BasicConsume(queue: _queueNameProcessed,
+                                         autoAck: true,
+                                         consumer: _consumer);
+        }
+
+        public void AddMessageToStorage(object model, BasicDeliverEventArgs eventArgs)
+        {
+            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(TransactionDto));
+
+            using (MemoryStream body = new MemoryStream(eventArgs.Body))
             {
-                DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(TransactionDto));
-
-                using (MemoryStream body = new MemoryStream(ea.Body))
+                try
                 {
-                    try
-                    {
-                        TransactionDto transaction = (TransactionDto)serializer.ReadObject(body);
+                    TransactionDto transaction = (TransactionDto)serializer.ReadObject(body);
 
-                        _storage.AddTransaction(transaction);
-                    }
-                    catch (Exception)
-                    {
-                        //invalid serialization object
-                    }
+                    _storage.AddTransaction(transaction);
                 }
-            };
-
-            _channelReceive.BasicConsume(queue: _queueNameProcessed,
-                                         autoAck: true,
-                                         consumer: _consumer);
-        }
-
-        public void Dispose()
-        {
-            if (_conn.IsOpen) _conn.Close();
-        }
-
-        public Task StartAsync(CancellationToken cancellationToken)
-        {
-            ConfigureChannels();
-            CreateMessageConsumer();
-
-            _channelReceive.BasicConsume(queue: _queueNameProcessed,
-                                         autoAck: true,
-                                         consumer: _consumer);
-
-            return Task.CompletedTask;
-        }
-
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            if (_conn.IsOpen) _conn.Close();
-
-            return Task.CompletedTask;
+                catch (Exception)
+                {
+                    //invalid serialization object
+                }
+            }
         }
     }
 }

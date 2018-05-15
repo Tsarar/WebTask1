@@ -43,6 +43,30 @@ namespace WebTask1.RabbitMQ
             _conn = factory.CreateConnection();
         }
 
+        public void Dispose()
+        {
+            if (_conn.IsOpen) _conn.Close();
+        }
+
+        public Task StartAsync(CancellationToken cancellationToken)
+        {
+            ConfigurateOperator();
+            CreateMessageConsumer();
+
+            _channelReceive.BasicConsume(queue: QUEUE_NAME_NEW,
+                autoAck: true,
+                consumer: _consumer);
+
+            return Task.CompletedTask;
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            if (_conn.IsOpen) _conn.Close();
+
+            return Task.CompletedTask;
+        }
+
         private void ConfigurateOperator()
         {
             if (_channelSend == null)
@@ -67,51 +91,7 @@ namespace WebTask1.RabbitMQ
         public void CreateMessageConsumer()
         {
            _consumer = new EventingBasicConsumer(_channelReceive);
-           _consumer.Received += (model, ea) =>
-            {
-                var random = new Random();
-                DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(TransactionDto));
-
-                using (MemoryStream body = new MemoryStream(ea.Body))
-                {
-                    try
-                    {
-                        TransactionDto transaction = (TransactionDto)serializer.ReadObject(body);
-
-                        transaction.Status = random.Next(0, 2) == 0 ? Statuses.Filled : Statuses.Rejected;
-
-                        WriteMessage(transaction);
-                    }
-                    catch (Exception)
-                    {
-                        //invalid serialization object
-                    }
-                }
-            };
-        }
-
-        public void Dispose()
-        {
-            if (_conn.IsOpen) _conn.Close();
-        }
-
-        public Task StartAsync(CancellationToken cancellationToken)
-        {
-            ConfigurateOperator();
-            CreateMessageConsumer();
-
-            _channelReceive.BasicConsume(queue: QUEUE_NAME_NEW,
-                                         autoAck: true,
-                                         consumer: _consumer);
-
-            return Task.CompletedTask;
-        }
-
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            if (_conn.IsOpen) _conn.Close();
-
-            return Task.CompletedTask;
+           _consumer.Received += RedirectMessageWithNewStatus;
         }
 
         public bool WriteMessage(object obj)
@@ -126,6 +106,28 @@ namespace WebTask1.RabbitMQ
                 return false;
             }
             return true;
+        }
+
+        public void RedirectMessageWithNewStatus(object model, BasicDeliverEventArgs eventArgs)
+        {
+            var random = new Random();
+            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(TransactionDto));
+
+            using (MemoryStream body = new MemoryStream(eventArgs.Body))
+            {
+                try
+                {
+                    TransactionDto transaction = (TransactionDto)serializer.ReadObject(body);
+
+                    transaction.Status = random.Next(0, 2) == 0 ? TransactionStatus.Filled : TransactionStatus.Rejected;
+
+                    WriteMessage(transaction);
+                }
+                catch (Exception)
+                {
+                    //invalid serialization object
+                }
+            }
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace WebTask1.Dto
 {
-    public enum Statuses
+    public enum TransactionStatus
     {
         New,
         Filled,
@@ -28,6 +28,6 @@ namespace WebTask1.Dto
         public string Currency { get; set; }
 
         [DataMember]
-        public Statuses Status { get; set; }
+        public TransactionStatus Status { get; set; }
     }
 }
